@@ -1,17 +1,33 @@
-from __future__ import with_statement
-from itertools import chain
-import datetime
 import sys
-import warnings
 import time
+import warnings
 import threading
 import time as mod_time
-from redis._compat import (b, basestring, bytes, imap, iteritems, iterkeys,
-                           itervalues, izip, long, nativestr, unicode,
-                           safe_unicode)
-from redis.connection import (ConnectionPool, UnixDomainSocketConnection,
-                              SSLConnection, Token)
+import datetime from datetime
+
+from itertools import chain
 from redis.lock import Lock, LuaLock
+from __future__ import with_statement
+
+from redis._compat import (
+    b,
+    basestring,
+    bytes,
+    imap,
+    iteritems,
+    iterkeys,
+    itervalues,
+    izip,
+    long,
+    nativestr,
+    unicode,
+    safe_unicode)
+from redis.connection import (
+    ConnectionPool,
+    UnixDomainSocketConnection,
+    SSLConnection,
+    Token)
+
 from redis.exceptions import (
     ConnectionError,
     DataError,
@@ -50,7 +66,7 @@ def timestamp_to_datetime(response):
         response = int(response)
     except ValueError:
         return None
-    return datetime.datetime.fromtimestamp(response)
+    return datetime.fromtimestamp(response)
 
 
 def string_keys_to_dict(key_string, callback):
@@ -436,16 +452,28 @@ class StrictRedis(object):
         connection_pool = ConnectionPool.from_url(url, db=db, **kwargs)
         return cls(connection_pool=connection_pool)
 
-    def __init__(self, host='localhost', port=6379,
-                 db=0, password=None, socket_timeout=None,
+    def __init__(self,
+                 host='localhost',
+                 port=6379,
+                 db=0,
+                 password=None,
+                 socket_timeout=None,
                  socket_connect_timeout=None,
-                 socket_keepalive=None, socket_keepalive_options=None,
-                 connection_pool=None, unix_socket_path=None,
-                 encoding='utf-8', encoding_errors='strict',
-                 charset=None, errors=None,
-                 decode_responses=False, retry_on_timeout=False,
-                 ssl=False, ssl_keyfile=None, ssl_certfile=None,
-                 ssl_cert_reqs=None, ssl_ca_certs=None,
+                 socket_keepalive=None,
+                 socket_keepalive_options=None,
+                 connection_pool=None,
+                 unix_socket_path=None,
+                 encoding='utf-8',
+                 encoding_errors='strict',
+                 charset=None,
+                 errors=None,
+                 decode_responses=False,
+                 retry_on_timeout=False,
+                 ssl=False,
+                 ssl_keyfile=None,
+                 ssl_certfile=None,
+                 ssl_cert_reqs=None,
+                 ssl_ca_certs=None,
                  max_connections=None):
         if not connection_pool:
             if charset is not None:
@@ -914,7 +942,7 @@ class StrictRedis(object):
         Set an expire flag on key ``name``. ``when`` can be represented
         as an integer indicating unix time or a Python datetime object.
         """
-        if isinstance(when, datetime.datetime):
+        if isinstance(when, datetime):
             when = int(mod_time.mktime(when.timetuple()))
         return self.execute_command('EXPIREAT', name, when)
 
@@ -1042,7 +1070,7 @@ class StrictRedis(object):
         as an integer representing unix time in milliseconds (unix time * 1000)
         or a Python datetime object.
         """
-        if isinstance(when, datetime.datetime):
+        if isinstance(when, datetime):
             ms = int(when.microsecond / 1000)
             when = int(mod_time.mktime(when.timetuple())) * 1000 + ms
         return self.execute_command('PEXPIREAT', name, when)
